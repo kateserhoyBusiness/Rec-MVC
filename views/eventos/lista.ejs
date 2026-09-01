@@ -1,28 +1,57 @@
-<h1>Eventos</h1>
+<div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>📅 Eventos</h1>
+    <% if (typeof usuario !== 'undefined' && usuario.userId && usuario.tipo === 'organizador') { %>
+      <a href="/eventos/novo" class="btn btn-primary">+ Criar Novo Evento</a>
+    <% } %>
+  </div>
 
-<% if (typeof usuario !== 'undefined' && usuario.tipo === 'organizador') { %>
-  <a href="/eventos/novo" style="display: inline-block; margin-bottom: 2rem; padding: 0.75rem 1.5rem; background-color: #27ae60; color: white; text-decoration: none; border-radius: 4px;">+ Criar Novo Evento</a>
-<% } %>
-
-<% if (typeof eventos !== 'undefined' && eventos.length > 0) { %>
-  <div class="eventos-grid">
-    <% eventos.forEach(evento => { %>
-      <div class="evento-card">
-        <div class="evento-card-content">
-          <h3><%= evento.titulo %></h3>
-          <p><strong>Organizador:</strong> <%= evento.organizador_nome %></p>
-          <p><strong>Data:</strong> <%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) %></p>
-          <% if (evento.local) { %>
-            <p><strong>Local:</strong> <%= evento.local %></p>
-          <% } %>
-          <p><%= evento.descricao ? evento.descricao.substring(0, 100) + '...' : 'Sem descrição' %></p>
-          <a href="/eventos/<%= evento.id %>">Ver Detalhes</a>
+  <% if (typeof eventos !== 'undefined' && eventos.length > 0) { %>
+    <div class="eventos-grid">
+      <% eventos.forEach(evento => { %>
+        <div class="evento-card">
+          <div class="evento-card-header">
+            <h3><%= evento.titulo %></h3>
+          </div>
+          <div class="evento-card-content">
+            <div class="evento-info">
+              <span>👤</span>
+              <strong><%= evento.organizador_nome %></strong>
+            </div>
+            <div class="evento-info">
+              <span>📅</span>
+              <strong><%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) %></strong>
+            </div>
+            <% if (evento.local) { %>
+              <div class="evento-info">
+                <span>📍</span>
+                <strong><%= evento.local %></strong>
+              </div>
+            <% } %>
+            <p class="evento-descricao">
+              <%= evento.descricao ? evento.descricao.substring(0, 120) + (evento.descricao.length > 120 ? '...' : '') : 'Sem descrição' %>
+            </p>
+          </div>
+          <div class="evento-card-footer">
+            <a href="/eventos/<%= evento.id %>" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Ver Detalhes</a>
+            <% if (typeof usuario !== 'undefined' && usuario.userId === evento.organizador_id) { %>
+              <a href="/eventos/<%= evento.id %>/editar" class="btn btn-warning btn-sm" style="flex: 1; text-align: center;">✏️ Editar</a>
+              <form method="POST" action="/eventos/<%= evento.id %>/excluir" style="flex: 1;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
+                <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;">🗑️ Excluir</button>
+              </form>
+            <% } %>
+          </div>
         </div>
-      </div>
-    <% }) %>
-  </div>
-<% } else { %>
-  <div class="erro">
-    <p>Nenhum evento cadastrado.</p>
-  </div>
-<% } %>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <div class="empty-state-icon">📭</div>
+      <h2>Nenhum evento encontrado</h2>
+      <p>Comece criando seu primeiro evento ou navegue para ver eventos criados por outros organizadores.</p>
+      <% if (typeof usuario !== 'undefined' && usuario.userId && usuario.tipo === 'organizador') { %>
+        <a href="/eventos/novo" class="btn btn-primary">+ Criar Primeiro Evento</a>
+      <% } %>
+    </div>
+  <% } %>
+</div>

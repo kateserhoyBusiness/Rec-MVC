@@ -183,7 +183,7 @@
 <body>
   <nav>
     <div>
-      <h2 style="color: white; display: inline;">EventHub</h2>
+      <h2 style="color: white; display: inline;">🎉 EventHub</h2>
     </div>
     <div>
       <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
@@ -192,10 +192,10 @@
         <% if (usuario.tipo === 'organizador') { %>
           <a href="/eventos/novo">Criar Evento</a>
         <% } %>
-        <a href="/logout">Sair</a>
+        <a href="/auth/logout">Sair</a>
       <% } else { %>
-        <a href="/login">Login</a>
-        <a href="/registro">Registro</a>
+        <a href="/auth/login">Login</a>
+        <a href="/auth/registro">Registro</a>
       <% } %>
     </div>
   </nav>
