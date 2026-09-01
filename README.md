@@ -131,5 +131,5 @@ eventhub-mvc/
 
 ---
 
-**Autor**: Seu Nome  
-**Data**: 2024
+**Autor**: Kaio Kleinkauf
+**Data**: 2026
