@@ -4,203 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EventHub - Gestão de Eventos</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-    }
-    nav {
-      background-color: #2c3e50;
-      color: white;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 1rem;
-      transition: color 0.3s;
-    }
-    nav a:hover {
-      color: #3498db;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    h1, h2 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
-    }
-    form {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: inherit;
-      font-size: 1rem;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-    button {
-      background-color: #3498db;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #2980b9;
-    }
-    .btn-danger {
-      background-color: #e74c3c;
-    }
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-    .btn-small {
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-    }
-    .erro {
-      background-color: #f8d7da;
-      color: #721c24;
-      padding: 1rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-      border: 1px solid #f5c6cb;
-    }
-    .sucesso {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 1rem;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-      border: 1px solid #c3e6cb;
-    }
-    .eventos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-    .evento-card {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .evento-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-    .evento-card-content {
-      padding: 1.5rem;
-    }
-    .evento-card h3 {
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
-      font-size: 1.3rem;
-    }
-    .evento-card p {
-      color: #666;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-    .evento-card a {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #3498db;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-    .evento-card a:hover {
-      background-color: #2980b9;
-    }
-    .inscricoes-list {
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      margin-top: 2rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .inscricao-item {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .inscricao-item:last-child {
-      border-bottom: none;
-    }
-    .usuario-info {
-      text-align: right;
-    }
-    .usuario-info small {
-      color: #666;
-    }
-  </style>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <nav>
-    <div>
-      <h2 style="color: white; display: inline;">🎉 EventHub</h2>
-    </div>
-    <div>
-      <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
-        <span>Bem-vindo, <%= usuario.nome %></span>
-        <a href="/eventos">Eventos</a>
-        <% if (usuario.tipo === 'organizador') { %>
-          <a href="/eventos/novo">Criar Evento</a>
+  <!-- NAVBAR PREMIUM -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="/eventos" class="navbar-brand">
+        <span class="brand-icon">✨</span>
+        <span class="brand-text">EventHub</span>
+      </a>
+      
+      <div class="navbar-menu">
+        <a href="/eventos" class="nav-link">
+          <span>📅</span> Eventos
+        </a>
+        
+        <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
+          <% if (usuario.tipo === 'organizador') { %>
+            <a href="/eventos/novo" class="nav-link nav-link-create">
+              <span>➕</span> Criar Evento
+            </a>
+          <% } %>
+          
+          <div class="nav-profile">
+            <div class="profile-avatar">
+              <%= usuario.nome.charAt(0).toUpperCase() %>
+            </div>
+            <span class="profile-name"><%= usuario.nome %></span>
+            <a href="/auth/logout" class="nav-logout">Sair</a>
+          </div>
+        <% } else { %>
+          <a href="/auth/login" class="nav-link">🔐 Login</a>
+          <a href="/auth/registro" class="nav-link nav-link-primary">
+            <span>✍️</span> Registrar
+          </a>
         <% } %>
-        <a href="/auth/logout">Sair</a>
-      <% } else { %>
-        <a href="/auth/login">Login</a>
-        <a href="/auth/registro">Registro</a>
-      <% } %>
+      </div>
     </div>
   </nav>
-  <div class="container">
-    <%- body %>
-  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="page-wrapper">
+    <div class="container">
+      <%- body %>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>EventHub © 2026 - Plataforma Moderna de Gestão de Eventos</p>
+      <div class="footer-links">
+        <a href="#privacidade">Privacidade</a> • 
+        <a href="#termos">Termos</a> • 
+        <a href="#contato">Contato</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

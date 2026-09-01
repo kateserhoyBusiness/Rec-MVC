@@ -1,82 +1,109 @@
 <div>
-  <a href="/eventos" style="display: inline-block; margin-bottom: 2rem; color: #6366f1; text-decoration: none;">← Voltar para Eventos</a>
+  <a href="/eventos" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2.5rem; color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+    ← Voltar
+  </a>
 
-  <div class="evento-detalhe">
-    <h1><%= evento.titulo %></h1>
-
-    <div class="evento-meta">
-      <div class="meta-item">
-        <strong>👤 Organizador</strong>
-        <p><%= evento.organizador_nome %></p>
-      </div>
-      <div class="meta-item">
-        <strong>📅 Data e Hora</strong>
-        <p><%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
-      </div>
-      <% if (evento.local) { %>
-        <div class="meta-item">
-          <strong>📍 Local</strong>
-          <p><%= evento.local %></p>
+  <div style="background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);">
+    <!-- Header com Gradiente -->
+    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 3rem; color: var(--white);">
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem;"><%= evento.titulo %></h1>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <span>👤</span> <strong>Organizador</strong>
+          </div>
+          <p style="margin: 0; opacity: 0.9;"><%= evento.organizador_nome %></p>
         </div>
-      <% } %>
-    </div>
-
-    <% if (evento.descricao) { %>
-      <div class="evento-descricao-full">
-        <h3 style="margin-top: 0; margin-bottom: 1rem; color: #1f2937;">Sobre este evento</h3>
-        <p><%= evento.descricao %></p>
-      </div>
-    <% } %>
-
-    <div class="evento-actions">
-      <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
-        <% if (evento.organizador_id === usuario.userId) { %>
-          <a href="/eventos/<%= evento.id %>/editar" class="btn btn-warning">✏️ Editar Evento</a>
-          <form method="POST" action="/eventos/<%= evento.id %>/excluir" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
-            <button type="submit" class="btn btn-danger">🗑️ Excluir Evento</button>
-          </form>
-        <% } else if (usuario.tipo === 'participante' && !usuarioJaInscrito) { %>
-          <form method="POST" action="/inscricoes/<%= evento.id %>" style="display: inline;">
-            <button type="submit" class="btn btn-success">✅ Se Inscrever</button>
-          </form>
-        <% } else if (usuarioJaInscrito) { %>
-          <div class="inscrito-badge">
-            ✓ Você está inscrito neste evento
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <span>📅</span> <strong>Data e Hora</strong>
+          </div>
+          <p style="margin: 0; opacity: 0.9;"><%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+        </div>
+        <% if (evento.local) { %>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 1.1rem; margin-bottom: 0.5rem;">
+              <span>📍</span> <strong>Local</strong>
+            </div>
+            <p style="margin: 0; opacity: 0.9;"><%= evento.local %></p>
           </div>
         <% } %>
-      <% } else { %>
-        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 6px; color: #78350f;">
-          <strong>Faça login para participar</strong><br>
-          <a href="/auth/login" class="btn btn-primary btn-sm" style="margin-top: 0.5rem;">Fazer Login</a>
+      </div>
+    </div>
+
+    <!-- Conteúdo -->
+    <div style="padding: 3rem;">
+      <% if (evento.descricao) { %>
+        <div style="margin-bottom: 2.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 1rem;">📝 Sobre este evento</h2>
+          <p style="color: var(--text-light); line-height: 1.8; font-size: 1.05rem;"><%= evento.descricao %></p>
         </div>
       <% } %>
+
+      <!-- Ações -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 2.5rem 0; padding: 2rem; background: var(--light); border-radius: 12px;">
+        <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
+          <% if (evento.organizador_id === usuario.userId) { %>
+            <a href="/eventos/<%= evento.id %>/editar" class="btn btn-secondary">✏️ Editar Evento</a>
+            <form method="POST" action="/eventos/<%= evento.id %>/excluir" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
+              <button type="submit" class="btn btn-danger">🗑️ Excluir Evento</button>
+            </form>
+          <% } else if (usuario.tipo === 'participante' && !usuarioJaInscrito) { %>
+            <form method="POST" action="/inscricoes/<%= evento.id %>" style="display: inline;">
+              <button type="submit" class="btn btn-success" style="padding: 0.875rem 2rem; font-size: 1rem;">
+                ✅ Se Inscrever Neste Evento
+              </button>
+            </form>
+          <% } else if (usuarioJaInscrito) { %>
+            <div style="padding: 1rem 1.5rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2)); border: 2px solid var(--success); border-radius: 10px; color: var(--success-dark); font-weight: 600; display: flex; align-items: center; gap: 0.75rem;">
+              <span>✓</span> Você está inscrito neste evento
+            </div>
+          <% } %>
+        <% } else { %>
+          <div style="padding: 1.5rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2)); border: 2px solid var(--warning); border-radius: 10px; color: #92400e; flex: 1;">
+            <strong style="font-size: 1.05rem;">🔐 Faça login para participar</strong>
+            <p style="margin: 0.5rem 0 1rem 0; font-size: 0.9rem;">Crie uma conta ou faça login para se inscrever neste evento</p>
+            <a href="/auth/login" class="btn btn-info" style="padding: 0.75rem 1.5rem;">Fazer Login</a>
+          </div>
+        <% } %>
+      </div>
     </div>
   </div>
 
-  <div class="inscricoes-list">
-    <h2>👥 Inscrições (<%= inscricoes.length %>)</h2>
-    <% if (inscricoes.length > 0) { %>
-      <% inscricoes.forEach(inscricao => { %>
-        <div class="inscricao-item">
-          <div>
-            <p><strong><%= inscricao.participante_nome %></strong></p>
-            <p style="color: #6b7280;"><%= inscricao.email %></p>
-            <small style="color: #9ca3af;">Inscrito em <%= new Date(inscricao.data_inscricao).toLocaleDateString('pt-BR') %></small>
-          </div>
-          <% if (typeof usuario !== 'undefined' && usuario.userId === evento.organizador_id) { %>
-            <div class="inscricao-actions">
-              <form method="POST" action="/inscricoes/<%= inscricao.id %>/remover" style="display: inline;" onsubmit="return confirm('Remover inscrição?');">
-                <input type="hidden" name="eventoId" value="<%= evento.id %>">
-                <button type="submit" class="btn btn-danger btn-sm">Remover</button>
-              </form>
+  <!-- Inscrições -->
+  <div style="margin-top: 3rem; background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);">
+    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1)); padding: 2rem; border-bottom: 1px solid var(--border);">
+      <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text); margin: 0;">
+        👥 Inscrições (<%= inscricoes.length %>)
+      </h2>
+    </div>
+    
+    <div style="padding: 2rem;">
+      <% if (inscricoes.length > 0) { %>
+        <div style="display: grid; gap: 1rem;">
+          <% inscricoes.forEach((inscricao, index) => { %>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--light); border-radius: 10px; border-left: 4px solid var(--primary); transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.2)'" onmouseout="this.style.boxShadow='none'">
+              <div>
+                <p style="margin: 0; font-weight: 700; color: var(--text); font-size: 1.05rem;"><%= inscricao.participante_nome %></p>
+                <p style="margin: 0.3rem 0 0 0; color: var(--text-light); font-size: 0.9rem;"><%= inscricao.email %></p>
+                <small style="color: var(--text-lighter); margin-top: 0.5rem; display: block;">Inscrito em <%= new Date(inscricao.data_inscricao).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' }) %></small>
+              </div>
+              <% if (typeof usuario !== 'undefined' && usuario.userId === evento.organizador_id) { %>
+                <form method="POST" action="/inscricoes/<%= inscricao.id %>/remover" style="display: inline;" onsubmit="return confirm('Remover inscrição de <%= inscricao.participante_nome %>?');">
+                  <input type="hidden" name="eventoId" value="<%= evento.id %>">
+                  <button type="submit" class="btn btn-danger btn-sm">🗑️ Remover</button>
+                </form>
+              <% } %>
             </div>
-          <% } %>
+          <% }) %>
         </div>
-      <% }) %>
-    <% } else { %>
-      <div style="text-align: center; padding: 2rem; color: #6b7280;">
-        <p>Nenhuma inscrição ainda. Seja o primeiro a se inscrever!</p>
-      </div>
-    <% } %>
+      <% } else { %>
+        <div style="text-align: center; padding: 2rem; color: var(--text-light);">
+          <p style="font-size: 1.05rem;">📭 Nenhuma inscrição ainda</p>
+          <p style="font-size: 0.9rem;">Seja o primeiro a se inscrever neste evento incrível!</p>
+        </div>
+      <% } %>
+    </div>
   </div>
 </div>

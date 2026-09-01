@@ -1,40 +1,50 @@
-<div>
-  <h1><%= evento ? '✏️ Editar Evento' : '✨ Criar Novo Evento' %></h1>
+<div style="max-width: 800px; margin: 0 auto;">
+  <div style="margin-bottom: 2rem;">
+    <h1 class="section-title">
+      <%= evento ? '✏️ Editar Evento' : '✨ Criar Novo Evento' %>
+    </h1>
+    <p class="section-subtitle">
+      <%= evento ? 'Atualize os detalhes do seu evento' : 'Compartilhe algo incrível com a comunidade' %>
+    </p>
+  </div>
 
-  <% if (typeof erro !== 'undefined' && erro) { %>
-    <div class="alert alert-danger">
-      <%= erro %>
-    </div>
-  <% } %>
-
-  <form method="POST">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="titulo" class="required">Título do Evento</label>
-        <input type="text" id="titulo" name="titulo" value="<%= evento ? evento.titulo : '' %>" placeholder="Ex: Workshop de Node.js" maxlength="150" required>
-        <small style="color: #6b7280;">Máximo 150 caracteres</small>
+  <div class="form-container">
+    <% if (typeof erro !== 'undefined' && erro) { %>
+      <div class="alert alert-danger">
+        <span>⚠️</span>
+        <%= erro %>
       </div>
-      <div class="form-group">
-        <label for="local">Local</label>
-        <input type="text" id="local" name="local" value="<%= evento ? evento.local : '' %>" placeholder="Ex: São Paulo, SP">
+    <% } %>
+
+    <form method="POST">
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.75rem;">
+        <div class="form-group">
+          <label for="titulo" class="form-label">Título do Evento</label>
+          <input type="text" id="titulo" name="titulo" class="form-input" value="<%= evento ? evento.titulo : '' %>" placeholder="Ex: Workshop de Node.js" maxlength="150" required>
+          <small style="color: var(--text-light); font-size: 0.85rem;">Máximo 150 caracteres</small>
+        </div>
+        <div class="form-group">
+          <label for="local" class="form-label">Local</label>
+          <input type="text" id="local" name="local" class="form-input" value="<%= evento ? evento.local : '' %>" placeholder="Ex: São Paulo, SP">
+        </div>
       </div>
-    </div>
 
-    <div class="form-row">
       <div class="form-group">
-        <label for="data_evento" class="required">Data e Hora</label>
-        <input type="datetime-local" id="data_evento" name="data_evento" value="<%= evento ? evento.data_evento.slice(0, 16) : '' %>" required>
+        <label for="data_evento" class="form-label">Data e Hora</label>
+        <input type="datetime-local" id="data_evento" name="data_evento" class="form-input" value="<%= evento ? evento.data_evento.slice(0, 16) : '' %>" required>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="descricao">Descrição Detalhada</label>
-      <textarea id="descricao" name="descricao" placeholder="Descreva seu evento, objetivo, público-alvo, programação, etc..."><%= evento ? evento.descricao : '' %></textarea>
-    </div>
+      <div class="form-group">
+        <label for="descricao" class="form-label">Descrição Detalhada</label>
+        <textarea id="descricao" name="descricao" class="form-textarea" placeholder="Descreva seu evento, objetivo, público-alvo, programação, etc..."><%= evento ? evento.descricao : '' %></textarea>
+      </div>
 
-    <div class="form-actions">
-      <a href="/eventos" class="btn btn-ghost">Cancelar</a>
-      <button type="submit" class="btn btn-primary"><%= evento ? '💾 Atualizar Evento' : '✨ Criar Evento' %></button>
-    </div>
-  </form>
+      <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
+        <a href="/eventos" class="btn btn-outline" style="flex: 1; justify-content: center;">← Voltar</a>
+        <button type="submit" class="btn btn-primary" style="flex: 1;">
+          <%= evento ? '💾 Atualizar' : '✨ Criar Evento' %>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

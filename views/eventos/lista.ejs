@@ -1,41 +1,55 @@
 <div>
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h1>📅 Eventos</h1>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 2rem;">
+    <div>
+      <h1 class="section-title">📅 Eventos Incríveis</h1>
+      <p class="section-subtitle">Descubra, participe e organize eventos em tempo real</p>
+    </div>
     <% if (typeof usuario !== 'undefined' && usuario.userId && usuario.tipo === 'organizador') { %>
-      <a href="/eventos/novo" class="btn btn-primary">+ Criar Novo Evento</a>
+      <a href="/eventos/novo" class="btn btn-success" style="padding: 0.875rem 2rem; font-size: 1rem;">
+        ➕ Criar Evento
+      </a>
     <% } %>
   </div>
 
   <% if (typeof eventos !== 'undefined' && eventos.length > 0) { %>
-    <div class="eventos-grid">
+    <div class="grid">
       <% eventos.forEach(evento => { %>
         <div class="evento-card">
-          <div class="evento-card-header">
-            <h3><%= evento.titulo %></h3>
-          </div>
-          <div class="evento-card-content">
-            <div class="evento-info">
-              <span>👤</span>
-              <strong><%= evento.organizador_nome %></strong>
-            </div>
-            <div class="evento-info">
+          <a href="/eventos/<%= evento.id %>" class="evento-header" style="text-decoration: none;">
+            <div class="evento-title"><%= evento.titulo %></div>
+            <div class="evento-date">
               <span>📅</span>
-              <strong><%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) %></strong>
+              <%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' }) %>
             </div>
+          </a>
+          
+          <div class="evento-body">
+            <div class="evento-info" style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">
+              <span>👤</span>
+              <%= evento.organizador_nome %>
+            </div>
+            
             <% if (evento.local) { %>
-              <div class="evento-info">
+              <div class="evento-location">
                 <span>📍</span>
-                <strong><%= evento.local %></strong>
+                <%= evento.local %>
               </div>
             <% } %>
-            <p class="evento-descricao">
-              <%= evento.descricao ? evento.descricao.substring(0, 120) + (evento.descricao.length > 120 ? '...' : '') : 'Sem descrição' %>
-            </p>
+            
+            <div class="evento-description">
+              <%= evento.descricao ? evento.descricao.substring(0, 150) + (evento.descricao.length > 150 ? '...' : '') : 'Sem descrição disponível' %>
+            </div>
+            
+            <div class="evento-inscricoes">
+              <span>👥</span>
+              Inscritos: <strong><%= evento.inscricoes_count || 0 %></strong>
+            </div>
           </div>
-          <div class="evento-card-footer">
-            <a href="/eventos/<%= evento.id %>" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Ver Detalhes</a>
+          
+          <div class="evento-footer">
+            <a href="/eventos/<%= evento.id %>" class="btn btn-primary btn-sm" style="flex: 1;">Ver Detalhes</a>
             <% if (typeof usuario !== 'undefined' && usuario.userId === evento.organizador_id) { %>
-              <a href="/eventos/<%= evento.id %>/editar" class="btn btn-warning btn-sm" style="flex: 1; text-align: center;">✏️ Editar</a>
+              <a href="/eventos/<%= evento.id %>/editar" class="btn btn-outline btn-sm" style="flex: 1;">✏️ Editar</a>
               <form method="POST" action="/eventos/<%= evento.id %>/excluir" style="flex: 1;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
                 <button type="submit" class="btn btn-danger btn-sm" style="width: 100%;">🗑️ Excluir</button>
               </form>
@@ -46,11 +60,32 @@
     </div>
   <% } else { %>
     <div class="empty-state">
-      <div class="empty-state-icon">📭</div>
-      <h2>Nenhum evento encontrado</h2>
-      <p>Comece criando seu primeiro evento ou navegue para ver eventos criados por outros organizadores.</p>
-      <% if (typeof usuario !== 'undefined' && usuario.userId && usuario.tipo === 'organizador') { %>
-        <a href="/eventos/novo" class="btn btn-primary">+ Criar Primeiro Evento</a>
+      <div class="empty-icon">📭</div>
+      <h2 class="empty-title">Nenhum evento encontrado</h2>
+      <p class="empty-text">
+        Parece que não há eventos no momento. <br>
+        <% if (typeof usuario !== 'undefined' && usuario.userId && usuario.tipo === 'organizador') { %>
+          Crie seu primeiro evento agora!
+        <% } else { %>
+          Volte em breve para descobrir eventos incríveis.
+        <% } %>
+      </p>
+      
+      <% if (typeof usuario === 'undefined' || !usuario.userId) { %>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="/auth/login" class="btn btn-primary">
+            🔐 Fazer Login
+          </a>
+          <a href="/auth/registro" class="btn btn-success">
+            ✍️ Criar Conta
+          </a>
+        </div>
+      <% } else if (usuario.tipo === 'organizador') { %>
+        <a href="/eventos/novo" class="btn btn-success">
+          ➕ Criar Meu Primeiro Evento
+        </a>
+      <% } else { %>
+        <p style="color: var(--text-light); font-size: 0.95rem;">Você é participante. Volte em breve para novos eventos! 🎉</p>
       <% } %>
     </div>
   <% } %>
