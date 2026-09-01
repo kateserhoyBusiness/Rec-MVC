@@ -13,7 +13,7 @@
   --white: #ffffff;
 }
 
-/* RESET */
+
 * {
   margin: 0;
   padding: 0;
@@ -240,7 +240,7 @@ body {
   flex: 1;
 }
 
-/* CARDS */
+
 .evento-card {
   background: var(--white);
   border-radius: 16px;
