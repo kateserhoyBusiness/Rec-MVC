@@ -1,0 +1,51 @@
+<h1><%= evento.titulo %></h1>
+
+<div style="background: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+  <p><strong>Organizador:</strong> <%= evento.organizador_nome %></p>
+  <p><strong>Data:</strong> <%= new Date(evento.data_evento).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) %></p>
+  <% if (evento.local) { %>
+    <p><strong>Local:</strong> <%= evento.local %></p>
+  <% } %>
+  <p><strong>Descrição:</strong></p>
+  <p><%= evento.descricao || 'Sem descrição' %></p>
+
+  <% if (typeof usuario !== 'undefined' && usuario.userId) { %>
+    <% if (evento.organizador_id === usuario.userId) { %>
+      <a href="/eventos/<%= evento.id %>/editar" class="btn-edit" style="display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background-color: #3498db; color: white; text-decoration: none; border-radius: 4px;">Editar Evento</a>
+      <form method="POST" action="/eventos/<%= evento.id %>/excluir" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este evento?');">
+        <button type="submit" class="btn-danger" style="margin-top: 1rem;">Excluir Evento</button>
+      </form>
+    <% } else if (usuario.tipo === 'participante' && !usuarioJaInscrito) { %>
+      <form method="POST" action="/inscricoes/<%= evento.id %>" style="display: inline;">
+        <button type="submit" style="margin-top: 1rem;">Se Inscrever</button>
+      </form>
+    <% } else if (usuarioJaInscrito) { %>
+      <p style="color: #27ae60; margin-top: 1rem;"><strong>✓ Você está inscrito neste evento</strong></p>
+    <% } %>
+  <% } %>
+</div>
+
+<div class="inscricoes-list">
+  <h2>Inscrições (<%= inscricoes.length %>)</h2>
+  <% if (inscricoes.length > 0) { %>
+    <% inscricoes.forEach(inscricao => { %>
+      <div class="inscricao-item">
+        <div>
+          <p><strong><%= inscricao.participante_nome %></strong></p>
+          <p><%= inscricao.email %></p>
+          <small>Inscrito em <%= new Date(inscricao.data_inscricao).toLocaleDateString('pt-BR') %></small>
+        </div>
+        <% if (typeof usuario !== 'undefined' && usuario.userId === evento.organizador_id) { %>
+          <form method="POST" action="/inscricoes/<%= inscricao.id %>/remover" style="display: inline;" onsubmit="return confirm('Remover inscrição?');">
+            <input type="hidden" name="eventoId" value="<%= evento.id %>">
+            <button type="submit" class="btn-danger btn-small">Remover</button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p>Nenhuma inscrição ainda.</p>
+  <% } %>
+</div>
+
+<p style="margin-top: 2rem;"><a href="/eventos">← Voltar para Eventos</a></p>
