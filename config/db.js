@@ -8,14 +8,28 @@ const poolConfig = {
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelayMs: 0
 };
 
-// Aiven requer SSL, configurar como objeto
-if (process.env.NODE_ENV === 'production' || process.env.DB_HOST.includes('aivencloud')) {
-  poolConfig.ssl = 'Amazon RDS';
+// Configurar SSL para Aiven/Render
+if (process.env.NODE_ENV === 'production' || process.env.DB_HOST) {
+  poolConfig.ssl = {
+    rejectUnauthorized: false
+  };
 }
 
 const pool = mysql.createPool(poolConfig);
+
+// Teste de conexão
+pool.getConnection()
+  .then(conn => {
+    console.log('✅ Conectado ao banco de dados com sucesso!');
+    conn.release();
+  })
+  .catch(err => {
+    console.error('❌ Erro ao conectar ao banco:', err.message);
+  });
 
 module.exports = pool;

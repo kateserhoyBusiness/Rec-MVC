@@ -7,6 +7,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const authRoutes = require('./routes/auth');
 const eventosRoutes = require('./routes/eventos');
 const inscricoesRoutes = require('./routes/inscricoes');
+const { initializeDatabase } = require('./config/init');
 
 const app = express();
 
@@ -43,6 +44,16 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+
+// Inicializar banco de dados e depois iniciar servidor
+initializeDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Falha ao iniciar servidor:', err);
+    process.exit(1);
+  });
+

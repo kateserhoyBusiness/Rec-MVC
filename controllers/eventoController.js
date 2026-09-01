@@ -13,8 +13,11 @@ async function getLista(req, res) {
     const eventos = await Evento.findAll();
     res.render('eventos/lista', { eventos, usuario: req.session });
   } catch (err) {
-    console.error('[EVENTOS LISTA ERROR]', err);
-    res.status(500).send('Erro ao carregar eventos');
+    console.error('[EVENTOS LISTA ERROR]', err.message, err.code);
+    const mensagem = process.env.NODE_ENV === 'production' 
+      ? 'Erro ao carregar eventos. Verifique a conexão com o banco.'
+      : err.message;
+    res.status(500).render('erro', { message: mensagem, error: err });
   }
 }
 
