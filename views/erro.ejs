@@ -8,7 +8,7 @@
     <p style="color: #7f1d1d; font-size: 1.1rem; margin: 0;">
       <%= typeof message !== 'undefined' ? message : 'Erro interno do servidor' %>
     </p>
-    <% if (error && typeof error !== 'undefined') { %>
+    <% if (typeof error !== 'undefined' && error) { %>
       <details style="margin-top: 1rem; cursor: pointer;">
         <summary style="color: #991b1b; font-weight: bold;">Detalhes do erro</summary>
         <pre style="background: #f9fafb; padding: 1rem; border-radius: 4px; overflow-x: auto; color: #1f2937; font-size: 0.85rem; margin-top: 0.5rem;"><%= error.stack || error.message %></pre>
